@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+"""
+Main executable for module
+"""
+
+from datetime import datetime
+from core.bootstrap.structure import CreateStructure
+from core.modules.fping import Fping
+from core.modules.httpscreenshot import HttpScreenshot
+from core.modules.nessus import Nessus
+from core.modules.nikto import Nikto
+from core.modules.nmap import NMap
+from core.modules.testports import TCPPorts
+from core.parsers.targets import BaseTargetsFile, PortTargetsFile
+
+from core.parsers.config import ParseConfig
+
+
+if __name__ == "__main__":
+    parseconfig = ParseConfig()
+    # INITIAL TIME STUFF
+    start_time = datetime.now()
+    print("── [I] START TIME: {t}".format(t=start_time))
+
+    ## CREATE STRUCTURE
+    createstructure = CreateStructure()
+    createstructure.main()
+
+    ## TARGETS
+    basetargetsfile = BaseTargetsFile()
+    basetargetsfile.main()
+
+    ## FPING
+    if parseconfig.fping_enabled:
+        fping = Fping()
+        fping.main()
+
+    ## NMAP
+    if parseconfig.nmap_enabled:
+        nmap = NMap()
+        nmap.main()
+
+    ## TODO: write uptargets from scan_targets_dic to file/db(?)
+
+    ## PARSE HOSTS WITH OPEN PORTS
+    porttargetsfile = PortTargetsFile()
+    porttargetsfile.main()
+
+    ## DOUBLE CHECK PORTS DETECTED BY NMAP (and soon other services)
+    tcpports = TCPPorts()
+    tcpports.main()
+
+    ## HTTPSCREENSHOT
+    if parseconfig.httpscreenshot_enabled:
+        httpscreenshot = HttpScreenshot()
+        httpscreenshot.main()
+
+    # NIKTO
+    if parseconfig.nikto_enabled:
+        nikto = Nikto()
+        nikto.main()
+
+    # NESSUS
+    if parseconfig.nessus_enabled:
+        nessus = Nessus()
+        nessus.main()
+
+    # FINISH UP TIME STUFF
+    end_time = datetime.now()
+    print("── [I] END TIME: {t}".format(t=end_time))
+    print("── [I] TOOK {t}".format(t=end_time - start_time))
