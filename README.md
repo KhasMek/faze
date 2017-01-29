@@ -34,7 +34,9 @@ Clone it wherever you want, /opt may be a good idea. Alternatively, install it t
 
 For this section we will assume that faze is in your $PATH. If you haven't done this, just substitute `/path/to/your/faze` for `faze`.
 
+
 #### To Run
+Add your targets file to the location (or whatever directory you have defined in faze.cfg) and confirm scope. Then execute
 ```
 faze
 ```
