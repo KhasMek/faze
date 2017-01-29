@@ -3,5 +3,3 @@ nessrest
 pygeoip
 python-nmap
 python-libnmap
--e git+https://github.com/breenmachine/httpscreenshot
-

@@ -15,10 +15,16 @@ Faze is tested on Kali Linux and Mac OS 10.12.x, but _should_ work on OS/Distro 
 
 Clone faze to a location of your choosing and install the required python modules via pip.
 
+Install [httpscreenshot](https://github.com/breenmachine/httpscreenshot)
+
 ```shell
+git clone https://github.com/breenmachine/httpscreenshot
+cd httpscreenshot
+sudo ./install-dependencies.sh
+cd ..
 git clone https://github.com/KhasMek/faze.git
 cd faze
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 Clone it wherever you want, /opt may be a good idea. Alternatively, install it to a location in your $PATH, or just make an alias in your rc file. Be Cartman.
