@@ -33,8 +33,8 @@ class Nikto():
             host = k
             port = v[0]
             service = v[1]
-            outfile = str("{o}/nikto-{p}-{h}.txt"
-                        .format(o=outdir, p=port, h=host))
+            outfile = str("{o}/nikto-{p}-{h}.{f}"
+                        .format(o=outdir, p=port, h=host, f=filetype))
             command = [
                 nikto_path,
                 "-h",
