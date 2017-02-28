@@ -9,6 +9,7 @@
 A modular pentesting tool with next to no documentation (so far). In it's inception faze has not been designed for hardcore red team activities. In the future that may change. Until then one can invoke the plethora of nse scripts available. 
 
 ---
+
 ### INSTALLATION
 
 Faze is tested on Kali Linux and Mac OS 10.12.x, but _should_ work on OS/Distro if you install the necessary packages.
@@ -30,12 +31,14 @@ pip3 install -r requirements.txt
 Clone it wherever you want, /opt may be a good idea. Alternatively, install it to a location in your $PATH, or just make an alias in your rc file. Be Cartman.
 
 ---
+
 ### USAGE
 
 For this section we will assume that faze is in your $PATH. If you haven't done this, just substitute `/path/to/your/faze` for `faze`.
 
 
 #### To Run
+
 Add your targets file to the location (or whatever directory you have defined in faze.cfg) and confirm scope. Then execute
 ```
 faze
@@ -44,6 +47,7 @@ faze
 It's just that easy, on the surface. This will run faze in your pwd, created the default directories and files. The real power comes from customizing the config file on a by project basis. Any values set in the local (pwd) config file will overwrite default set values, other will be retained. Keep that in mind. **Note:** Only disable the nmap module if you're resuming a project in which the nmap scans have already completed.
 
 ##### EXAMPLE OUTPUT
+
 ```bash
 .
 ├── faze.cfg
