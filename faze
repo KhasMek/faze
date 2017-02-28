@@ -12,7 +12,6 @@ from core.modules.nikto import Nikto
 from core.modules.nmap import NMap
 from core.modules.testports import TCPPorts
 from core.parsers.targets import BaseTargetsFile, PortTargetsFile
-
 from core.parsers.config import ParseConfig
 
 
@@ -59,6 +58,11 @@ if __name__ == "__main__":
     if parseconfig.nikto_enabled:
         nikto = Nikto()
         nikto.main()
+
+    # NMAP PHASE-2
+    if parseconfig.nmap_phase_2_enabled:
+        nmap = NMap()
+        nmap.phase2()
 
     # NESSUS
     if parseconfig.nessus_enabled:

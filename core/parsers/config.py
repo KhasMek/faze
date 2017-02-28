@@ -73,6 +73,9 @@ class ParseConfig():
     nmap_ports = config['NMAP']['ports']
     nmap_flags = json.loads(config['NMAP']['flags'])
     nmap_threads = config['NMAP']['threads']
+    nmap_phase_2_enabled = config['NMAP']['phase_2_enabled']
+    nmap_phase_2_outdir = config['NMAP']['outdir']
+    nmap_phase_2_scripts = json.loads(config['NMAP']['phase_2_scripts'])
 
     # HTTPSCREENSHOT
     httpscreenshot_enabled = config['HTTPSCREENSHOT']['enabled']

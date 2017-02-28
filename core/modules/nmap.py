@@ -24,31 +24,58 @@ class NmapWorker(Thread):
     def run(self):
         while True:
             # Get the work from the queue and expand the tuple
-            target, nmap_ports, flag = self.queue.get()
+            target, nmap_ports, flag, xml = self.queue.get()
             nmap = NMap()
-            nmap.runnmap(target, nmap_ports, flag)
+            nmap.runnmap(target, nmap_ports, flag, xml)
             self.queue.task_done()
 
 
 class NMap():
     def __init__(self):
-        # Keep an eye on this - may cause issues
-        parseconfig = ParseConfig()
-        self.nmap_ports = parseconfig.nmap_ports
-        self.nmap_flags = parseconfig.nmap_flags
-        self.nmap_threads = int(parseconfig.nmap_threads)
-        self.outdir = parseconfig.directories[0]
+        self.parseconfig = ParseConfig()
         self.nm = nmap.PortScanner()
-        self.base_targets_dict = parseconfig.base_targets_dict
-        self.up_targets_dict = parseconfig.up_targets_dict
+        self.up_targets_dict = self.parseconfig.up_targets_dict
 
     def main(self):
         logging.debug("STARTING - nmap")
-        self.queuenmap(self.nmap_ports, self.nmap_flags, self.nmap_threads)
+        target_dict = self.parseconfig.base_targets_dict
+        nmap_ports = self.parseconfig.nmap_ports
+        nmap_flags = self.parseconfig.nmap_flags
+        nmap_threads = int(self.parseconfig.nmap_threads)
+        # nmap discovery output always goes to Phase-1.
+        outdir = self.parseconfig.directories[0]
+        self.queuenmap(target_dict, nmap_ports, nmap_flags, nmap_threads, outdir)
         logging.debug("COMPLETED - nmap")
 
+    def phase2(self):
+        logging.debug("STARTING - nmap phase-2")
+        targets = self.parseconfig.port_targets_dict
+        nmap_threads = int(self.parseconfig.nmap_threads)
+        outdir = self.parseconfig.nmap_phase_2_outdir
+        phase_2_scripts = self.parseconfig.nmap_phase_2_scripts
+        print("── [┬] RUNNING NMAP WITH PHASE-2 SCRIPTS")
+        queue = Queue()
+        logging.debug("Phase-2 nmap targets: {t}".format(t=targets))
+        logging.debug("Phase-2 nmap scripts: {s}".format(s=phase_2_scripts))
+        for x in range(nmap_threads):
+            logging.debug("Nmap thread number {x}".format(x=x))
+            worker = NmapWorker(queue)
+            worker.daemon = True
+            worker.start()
+        for flag in phase_2_scripts:
+            flag = "-sS -sV --script={f}".format(f=flag)
+            for target, nmap_ports in targets.items():
+                target = target.replace("[ ", "")
+                nmap_ports = ','.join(map(str, nmap_ports))
+                logging.debug("Running nmap with script - {f} on {t} : {p}"
+                    .format(f=flag, t=target, p=nmap_ports))
+                xml = self.parsefilename(target, outdir, flag.strip())
+                queue.put((target, nmap_ports, flag, xml))
+        queue.join()
+        print("── [*] NMAP COMPLETE")
+        logging.debug("COMPLETED - nmap phase-2")
+
     def parsefilename(self, target, outdir, flags):
-        # TODO: account for --script=$script and --script=subdir/$script
         t = target
         logging.debug("Parsing {t}".format(t=t))
         if "--" in t:
@@ -82,7 +109,7 @@ class NMap():
                         .format(p=port, n=self.nm[host][proto][port]['name']))
         print("    │ └─ COMPLETE!")
 
-    def runnmap(self, target, nmap_ports, flag):
+    def runnmap(self, target, nmap_ports, flag, xml):
         # -sP may output a different json format?
         logging.debug("{t} {p} {f}".format(t=target, p=nmap_ports, f=flag))
         if [variable for variable in flag.split() if "-sP" in variable]:
@@ -107,17 +134,17 @@ class NMap():
         logging.debug("HOSTS: {h}".format(h=self.nm.all_hosts()))
         if self.nm.all_hosts():
             # We may be able to just feed them all in at once?
-            for host in self.nm.all_hosts():
-                self.up_targets_dict.append(host)
-            self.printresults(self.nm.all_hosts())
+            # TODO: I should probably move this to targets module. ghetto 4nao
+            if "Phase-2" not in str(xml):
+                for host in self.nm.all_hosts():
+                    self.up_targets_dict.append(host)
+                self.printresults(self.nm.all_hosts())
             logging.debug(self.nm.all_hosts())
         # else: if nm. is up or something like that?
-        # TODO: this should be it's own function probably.
-        xml = self.parsefilename(target, self.outdir, flag.strip())
         logging.debug("XML FILENAME: {x}".format(x=xml))
         xml.write(self.nm.get_nmap_last_output())
 
-    def queuenmap(self, nmap_ports, nmap_flags, nmap_threads):
+    def queuenmap(self, target_dict, nmap_ports, nmap_flags, nmap_threads, outdir):
         print("── [┬] RUNNING NMAP AGAINST TARGETS LIST")
         queue = Queue()
         for x in range(nmap_threads):
@@ -125,12 +152,14 @@ class NMap():
             worker = NmapWorker(queue)
             worker.daemon = True
             worker.start()
-        for flag in self.nmap_flags:
+        for flag in nmap_flags:
             logging.debug(flag)
-            for type, targets in self.base_targets_dict.items():
+            for type, targets in target_dict.items():
                 for target in targets:
                     logging.debug("{ty} : {ta}".format(ty=type, ta=target))
-                    queue.put((target, self.nmap_ports, flag))
+                    # TODO: this should be it's own function probably.
+                    xml = self.parsefilename(target, outdir, flag.strip())
+                    queue.put((target, nmap_ports, flag, xml))
         queue.join()
         print("── [*] NMAP COMPLETE")
 
