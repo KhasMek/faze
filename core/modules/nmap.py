@@ -63,7 +63,8 @@ class NMap():
             worker.daemon = True
             worker.start()
         for flag in phase_2_scripts:
-            flag = "-sS -sV --script={f}".format(f=flag)
+            if "-" not in flag[0][0]:
+                flag = "-sS -sV --script={f}".format(f=flag)
             for target, nmap_ports in targets.items():
                 target = target.replace("[ ", "")
                 nmap_ports = ','.join(map(str, nmap_ports))
