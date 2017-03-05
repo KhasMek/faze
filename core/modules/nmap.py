@@ -112,7 +112,8 @@ class NMap():
 
     def runnmap(self, target, nmap_ports, flag, xml):
         # -sP may output a different json format?
-        logging.debug("{t} {p} {f}".format(t=target, p=nmap_ports, f=flag))
+        logging.debug("RUNNING NMAP ON: {t} {p} {f} {x}"
+            .format(t=target, p=nmap_ports, f=flag, x=xml))
         if [variable for variable in flag.split() if "-sP" in variable]:
             print("    ├── nmap {f} {t}"
                 .format(f=flag, t=target))
@@ -154,10 +155,10 @@ class NMap():
             worker.daemon = True
             worker.start()
         for flag in nmap_flags:
-            logging.debug(flag)
             for type, targets in target_dict.items():
                 for target in targets:
-                    logging.debug("{ty} : {ta}".format(ty=type, ta=target))
+                    logging.debug("{ty} : {ta} : {f}"
+                        .format(ty=type, ta=target, f=flag))
                     # TODO: this should be it's own function probably.
                     xml = self.parsefilename(target, outdir, flag.strip())
                     queue.put((target, nmap_ports, flag, xml))
