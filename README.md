@@ -89,6 +89,7 @@ It's just that easy, on the surface. This will run faze in your pwd, created the
 
 ### TODO
 
+- [ ] FIX: Last nmap xml _written_ by Phase-1 nmap is never actually written to file.
 - [ ] **TONS** of exception handling. Please file Issue Reports to help me find all the areas I need to add it.
 - [ ] Remove dependency for libnmap-parser and use python-nmap across the board
 - [ ] Upload to Elastic
