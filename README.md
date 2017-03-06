@@ -54,26 +54,27 @@ It's just that easy, on the surface. This will run faze in your pwd, created the
 ├── faze.log
 ├── notes.md
 ├── Phase-1
-│   ├── nmap-sS-sV_script_vulscan_vulscan_nse-192.168.1.213.xml
-│   ├── nmap-sV-sF-192.168.1.213.xml
-│   ├── nmap-sV-sn-192.168.1.213.xml
-│   └── nmap-sV-sT-sU-192.168.1.213.xml
+│   ├── nmap-sV-O-sT-sU-metasploitable2.xml
+│   ├── nmap-sV-sn-metasploitable2.xml
+│   └── nmap-sV-sT-metasploitable2.xml
 ├── Phase-2
 │   ├── httpscreenshot
 │   │   ├── ghostdriver.log
-│   │   ├── http%3A%2F%2F192.168.1.213%3A80.html
-│   │   ├── http%3A%2F%2F192.168.1.213%3A80.png
-│   │   ├── http%3A%2F%2F192.168.1.213%3A8180.html
-│   │   └── http%3A%2F%2F192.168.1.213%3A8180.png
-│   ├── MetaSploitable-2.0.nessus
+│   │   ├── http%3A%2F%2Fmetasploitable2%3A80.html
+│   │   └── http%3A%2F%2Fmetasploitable2%3A80.png
+│   ├── Metasploitable.nessus
 │   ├── nikto
-│   │   └── nikto-8180-192.168.1.213.txt
+│   │   └── nikto-80-metasploitable2.xml
+│   ├── nmap
+│   │   ├── nmap-A-metasploitable2.xml
+│   │   ├── nmap-sS-sV_script_vulscan_vulscan_nse-metasploitable2.xml
+│   │   └── nmap-sS-sV_script_vulscan_vulscan_nsevulscandb_scipvuldb_csv-metasploitable2.xml
 │   └── tcp_port_results.md
 ├── port_targets.csv
 ├── Reporting
 └── targets
 
-5 directories, 17 files
+6 directories, 17 files
 ```
 ###### *Example output is from [Metasploitable 2.0](https://sourceforge.net/projects/metasploitable/files/Metasploitable2/)*
 
