@@ -8,6 +8,7 @@ import ipaddress
 import logging
 import nmap
 import os
+import re
 
 from core.parsers.config import ParseConfig
 from core.services.logwriter import LoggingManager
@@ -86,9 +87,7 @@ class NMap():
             ending = ipaddress.ip_network(t, strict=False).network_address
         else:
             ending = t
-        for char in [ "=", "/", "--", "." ]:
-            if char in flags:
-                flags = flags.replace(char, "_")
+        flags = re.sub(r"(?<=\w)\s(?=\w)|(?<=\w)([=])(?=\w)|(?<=\w)([/])(?=\w)|([-])([-])|(?<=\w)([.])(?=\w)", "_", flags)
         f = str("{o}/nmap{f}-{e}.xml"
                 .format(o=outdir, f=flags.replace(" ", ""), e=ending))
         xml = open(f, 'a')

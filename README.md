@@ -68,7 +68,7 @@ It's just that easy, on the surface. This will run faze in your pwd, created the
 │   ├── nmap
 │   │   ├── nmap-A-metasploitable2.xml
 │   │   ├── nmap-sS-sV_script_vulscan_vulscan_nse-metasploitable2.xml
-│   │   └── nmap-sS-sV_script_vulscan_vulscan_nsevulscandb_scipvuldb_csv-metasploitable2.xml
+│   │   └── nmap-sS-sV_script_vulscan_vulscan_nse_vulscandb_scipvuldb_csv-metasploitable2.xml
 │   └── tcp_port_results.md
 ├── port_targets.csv
 ├── Reporting
