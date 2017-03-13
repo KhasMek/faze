@@ -38,10 +38,12 @@ class BaseTargetsFile():
         logging.debug("{ty}: {ta}".format(ty=type, ta=defined_target))
 
     def targettype(self, target):
+        logging.debug("target = {t}".format(t=target))
         t = target
         if '--' in t:
             split = t.split(' ')
             t = split[0]
+            logging.debug("t = {t}".format(t=t))
         # Assume we're not dealing with IPv6 address space
         if re.search('[a-zA-Z]', t):
             self.addtarget('hostname', target)

@@ -142,8 +142,11 @@ class NMap():
                 self.printresults(self.nm.all_hosts())
             logging.debug(self.nm.all_hosts())
         # else: if nm. is up or something like that?
-        logging.debug("XML FILENAME: {x}".format(x=xml))
-        xml.write(self.nm.get_nmap_last_output())
+        logging.debug("XML FILENAME: {x}".format(xml))
+        results = self.nm.get_nmap_last_output()
+        xml.write(results)
+        logging.debug("RESULTS: {r}".format(r=results))
+        logging.debug("XML FILENAME WRITTEN: {x}".format(xml))
 
     def queuenmap(self, target_dict, nmap_ports, nmap_flags, nmap_threads, outdir):
         print("── [┬] RUNNING NMAP AGAINST TARGETS LIST")
