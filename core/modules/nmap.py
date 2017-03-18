@@ -119,6 +119,12 @@ class NMap():
             logging.info("Running nmap on {t} with flags '{f}'"
                 .format(t=target, f=flag))
             self.nm.scan(hosts=target, arguments=flag)
+        if [variable for variable in flag.split() if "-sn" in variable]:
+            print("    ├── nmap {f} {t}"
+                .format(f=flag, t=target))
+            logging.info("Running nmap on {t} with flags '{f}'"
+                .format(t=target, f=flag))
+            self.nm.scan(hosts=target, arguments=flag)
             # Check if nmap commands need root/sudo.
         elif [variable for variable in flag.split() if ("-sF" or "-sU") in variable]:
             print("    ├── nmap {f} {t}"
