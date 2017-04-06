@@ -43,10 +43,9 @@ class ParseConfig():
     directories = json.loads(config['DEFAULT']['directories'])
     for section in config.sections():
         try:
-            if config[section]["outdir"]:
-                if config[section]["enabled"]:
-                    # TODO: maybe logging here?
-                    directories.append(config[section]["outdir"])
+            if config[section]["outdir"] and config[section]["enabled"]:
+                # TODO: maybe logging here?
+                directories.append(config[section]["outdir"])
         except KeyError:
             pass
     files = json.loads(config['DEFAULT']['files'])
