@@ -9,12 +9,11 @@ import os
 import subprocess
 
 from core.helpers.misc import ChangeDir
-from core.parsers.xml import NmapXML
 from core.parsers.config import ParseConfig
 from core.services.logwriter import LoggingManager
-from textwrap import TextWrapper
 
-class HttpScreenshot():
+
+class HttpScreenshot:
     def __init__(self):
         LoggingManager()
         parseconfig = ParseConfig()
@@ -26,12 +25,13 @@ class HttpScreenshot():
     def main(self):
         print("── [┬] RUNNING HTTPSCREENSHOT AGAINST WWW HOSTS")
         logging.debug("STARTING - httpscreenshot")
-        self.httpscreenshotxmls(self.www_targets, self.indir,
-            self.outdir, self.workers)
+        self.httpscreenshotxmls(self.indir,
+                                self.outdir, self.workers)
         print("── [*] HTTPSCREENSHOT COMPLETE!")
         logging.debug("COMPLETED - httpscreenshot")
 
-    def httpscreenshotxmls(self, www_targets, indir, outdir, workers):
+    @staticmethod
+    def httpscreenshotxmls(indir, outdir, workers):
         path = ParseConfig().httpscreenshot_path
         with ChangeDir(outdir):
             for file in os.listdir(indir):
@@ -53,6 +53,4 @@ class HttpScreenshot():
                         # TODO: unify output with rest of program
                         # TODO: add filename output if there is an issue parsing it.
                         logging.info("Running {c}".format(c=' '.join(command)))
-                        cmd = subprocess.run(command, universal_newlines=True,
-                            shell=False)
-
+                        subprocess.run(command, universal_newlines=True, shell=False)

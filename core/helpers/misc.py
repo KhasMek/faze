@@ -5,7 +5,7 @@ Random functions hang out here until they find a real home
 import os
 
 
-class ChangeDir():
+class ChangeDir:
     """
     Context manager for changing the current working directory
     """

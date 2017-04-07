@@ -4,7 +4,6 @@ Run fping on targets list
 """
 
 import logging
-import os
 import subprocess
 
 from core.parsers.config import ParseConfig
@@ -12,7 +11,7 @@ from core.services.logwriter import LoggingManager
 from textwrap import TextWrapper
 
 
-class Fping():
+class Fping:
     def __init__(self):
         LoggingManager()
         parseconfig = ParseConfig()
@@ -25,14 +24,13 @@ class Fping():
         self.runfping(self.base_targets_dict)
         logging.info("FINISHED - fping")
 
-
     def fping(self, cmd):
         print("    ├─┬─ {c}".format(c=' '.join(cmd)))
         logging.info(' '.join(cmd))
         command = subprocess.run(cmd, stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL, universal_newlines=True, shell=False)
+                                 stderr=subprocess.DEVNULL, universal_newlines=True, shell=False)
         wrapper = TextWrapper(initial_indent="    │ └─── ",
-            subsequent_indent="    │\t   ")
+                              subsequent_indent="    │\t   ")
         if len(command.stdout.split("\n")) > 2:
             output = wrapper.fill(command.stdout.replace("\n", ", "))
             output = output.rstrip(',')
@@ -53,20 +51,20 @@ class Fping():
         for target in targets:
             t = target.split(' ')[0]
             logging.debug("SUBNET: {t}".format(t=t))
-            cmd = [ self.fping_path, "-g", "-a", t ]
+            cmd = [self.fping_path, "-g", "-a", t]
             self.fping(cmd)
 
     def fpingip(self, targets):
         for target in targets:
             t = target.split(' ')[0]
             logging.debug("IP: {t}".format(t=t))
-            cmd = [ self.fping_path, "-a", t.split('/')[0] ]
+            cmd = [self.fping_path, "-a", t.split('/')[0]]
             self.fping(cmd)
 
     def fpinghostname(self, targets):
         for target in targets:
             t = target.split(' ')[0]
-            cmd = [ self.fping_path, "-a", t ]
+            cmd = [self.fping_path, "-a", t]
             logging.debug("HOSTNAME: {t}".format(t=t))
             self.fping(cmd)
 
@@ -80,24 +78,18 @@ class Fping():
             else:
                 end_number = t.split("-")[1]
             for i in range(int(start_number), int(end_number)):
-                cmd = [ self.fping_path, "-a", "{ft}.{i}"
-                    .format(ft=first_three, i=i) ]
+                cmd = [self.fping_path, "-a", "{ft}.{i}".format(ft=first_three, i=i)]
                 self.fping(cmd)
 
     def runfping(self, base_targets_dict):
         print("── [┬] FPING")
-        for type, targets in base_targets_dict.items():
-            if "subnet" in type:
+        for _type, targets in base_targets_dict.items():
+            if "subnet" in _type:
                 self.fpingsubnet(targets)
-            if "ip addres" in type:
+            if "ip addres" in _type:
                 self.fpingip(targets)
-            if "hostname" in type:
+            if "hostname" in _type:
                 self.fpinghostname(targets)
-            if "range" in type:
+            if "range" in _type:
                 self.fpingrange(targets)
         print("── [*] FPING COMPLETE")
-
-
-if __name__ == '__main__':
-    fping = self.Fping()
-    fping.runfping()

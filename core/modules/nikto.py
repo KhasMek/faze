@@ -3,15 +3,14 @@
 woo nikto scanning
 """
 
-import os
 import logging
 import subprocess
 
 from core.parsers.xml import NmapXML
 from core.parsers.config import ParseConfig
-from core.services.logwriter import LoggingManager
 
-class Nikto():
+
+class Nikto:
     def __init__(self):
         parseconfig = ParseConfig()
         self.www_targets = parseconfig.www_targets
@@ -26,15 +25,16 @@ class Nikto():
         print("── [*] NIKTO COMPLETE")
         logging.debug("COMPLETED - nikto")
 
-    def runnikto(self, www_targets, outdir, nikto_path, filetype):
+    @staticmethod
+    def runnikto(www_targets, outdir, nikto_path, filetype):
         nmapxml = NmapXML()
         nmapxml.wwwports()
-        for k,v in www_targets.items():
+        for k, v in www_targets.items():
             host = k
             port = v[0]
             service = v[1]
             outfile = str("{o}/nikto-{p}-{h}.{f}"
-                        .format(o=outdir, p=port, h=host, f=filetype))
+                          .format(o=outdir, p=port, h=host, f=filetype))
             command = [
                 nikto_path,
                 "-h",
@@ -47,10 +47,10 @@ class Nikto():
                 filetype
             ]
             print("    ├─┬─ TARGET: {h}:{p} ({s})"
-                    .format(h=host, p=port, s=service))
+                  .format(h=host, p=port, s=service))
             print("    │ ├─── {c}".format(c=' '.join(command)))
             # TODO: This needs a try and except for FileNotFoundError
             logging.info("Running {c}".format(c=' '.join(command)))
             subprocess.run(command, stdout=subprocess.DEVNULL, stderr=None,
-                shell=False)
+                           shell=False)
             print("    │ └─ COMPLETE: {h}:{p}".format(h=host, p=port))

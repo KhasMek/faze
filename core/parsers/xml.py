@@ -11,17 +11,19 @@ from core.parsers.config import ParseConfig
 from libnmap.parser import NmapParser
 from xml.etree.ElementTree import ParseError
 
+
 # TODO: This could probably be smarter.
 # xml file detection.
-class Xml():
-    def validatenmapxml(self, phase1):
+class Xml:
+    @staticmethod
+    def validatenmapxml(phase1):
         for file in os.listdir(phase1):
             file = os.path.join(phase1, file)
             files_to_parse = ParseConfig().files_to_parse
             try:
-                tree = ET.parse(file)
+                ET.parse(file)
                 logging.debug("Adding {f} to list of files to parse"
-                    .format(f=file))
+                              .format(f=file))
                 files_to_parse.append(file)
             except ParseError:
                 logging.warning("{f} is malformed or not an xml".format(f=file))
@@ -33,8 +35,9 @@ class Xml():
         return files_to_parse
 
 
-class NmapXML():
-    def wwwports(self):
+class NmapXML:
+    @staticmethod
+    def wwwports():
         files_to_parse = ParseConfig().files_to_parse
         www_targets = ParseConfig().www_targets
         for xml in files_to_parse:

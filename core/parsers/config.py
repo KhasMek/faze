@@ -9,8 +9,9 @@ from collections import defaultdict
 
 config = configparser.ConfigParser()
 config_file = "faze.cfg"
+_loaded = ''
 _rootpathcfg = os.path.join(os.path.dirname(sys.modules['__main__'].__file__),
-    config_file)
+                            config_file)
 _homedircfg = os.path.join(os.path.expanduser('~'), "faze", config_file)
 
 if _rootpathcfg:
@@ -25,6 +26,7 @@ if not _loaded:
     print("── [!] NO CONFIG FILE FOUND! QUITTING!")
     sys.exit()
 
+
 def printconfigsettings():
     print(config.sections())
     for section in config.sections():
@@ -36,7 +38,7 @@ def printconfigsettings():
             print(setting)
 
 
-class ParseConfig():
+class ParseConfig:
     base_targets = config['DEFAULT']['base_targets']
     port_targets = config['DEFAULT']['port_targets']
     tcp_port_results = config['DEFAULT']['tcp_port_results']
@@ -96,7 +98,3 @@ class ParseConfig():
     nessus_api_skey = config['NESSUS']['api_skey']
     nessus_policy = config['NESSUS']['policy']
     nessus_insecure = config['NESSUS']['insecure']
-
-
-if __name__ == "__main__":
-    printconfigsettings()

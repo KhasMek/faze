@@ -14,42 +14,41 @@ from core.modules.testports import TCPPorts
 from core.parsers.targets import BaseTargetsFile, PortTargetsFile
 from core.parsers.config import ParseConfig
 
-
 if __name__ == "__main__":
     parseconfig = ParseConfig()
     # INITIAL TIME STUFF
     start_time = datetime.now()
     print("── [I] START TIME: {t}".format(t=start_time))
 
-    ## CREATE STRUCTURE
+    # CREATE STRUCTURE
     createstructure = CreateStructure()
     createstructure.main()
 
-    ## TARGETS
+    # TARGETS
     basetargetsfile = BaseTargetsFile()
     basetargetsfile.main()
 
-    ## FPING
+    # FPING
     if parseconfig.fping_enabled:
         fping = Fping()
         fping.main()
 
-    ## NMAP
+    # NMAP
     if parseconfig.nmap_enabled:
         nmap = NMap()
         nmap.main()
 
-    ## TODO: write uptargets from scan_targets_dic to file/db(?)
+    # TODO: write uptargets from scan_targets_dic to file/db(?)
 
-    ## PARSE HOSTS WITH OPEN PORTS
+    # PARSE HOSTS WITH OPEN PORTS
     porttargetsfile = PortTargetsFile()
     porttargetsfile.main()
 
-    ## DOUBLE CHECK PORTS DETECTED BY NMAP (and soon other services)
+    # DOUBLE CHECK PORTS DETECTED BY NMAP (and soon other services)
     tcpports = TCPPorts()
     tcpports.main()
 
-    ## HTTPSCREENSHOT
+    # HTTPSCREENSHOT
     if parseconfig.httpscreenshot_enabled:
         httpscreenshot = HttpScreenshot()
         httpscreenshot.main()

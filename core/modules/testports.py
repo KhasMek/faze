@@ -8,16 +8,14 @@ woo testing for open tcp/udp ports
 # things.
 
 import csv
-import select
 import socket
-import string
-import sys
 
 from core.parsers.config import ParseConfig
 
 parseconfig = ParseConfig()
 
-class TCPPorts():
+
+class TCPPorts:
     def __init__(self):
         self.port_targets = parseconfig.port_targets
         self.tcp_port_results = parseconfig.tcp_port_results
@@ -57,8 +55,3 @@ class TCPPorts():
                 print(neh)
                 results.write(neh + '\n')
                 pass
-
-
-if __name__ == "__main__":
-    tcpports = TCPPorts()
-    tcpports.main()

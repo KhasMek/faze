@@ -16,7 +16,8 @@ from textwrap import TextWrapper
 
 parseconfig = ParseConfig()
 
-class BaseTargetsFile():
+
+class BaseTargetsFile:
     def __init__(self):
         LoggingManager()
         self.base_targets = parseconfig.base_targets
@@ -29,13 +30,13 @@ class BaseTargetsFile():
             wrapper = TextWrapper(initial_indent="", subsequent_indent="    │\t\t\t")
             # TODO: format output to match fping
             print("    ├─── {ty} \t{ta}"
-                .format(ty=k.upper() + ":", ta=wrapper.fill(", ".join(v))))
+                  .format(ty=k.upper() + ":", ta=wrapper.fill(", ".join(v))))
             logging.info("{k}: {v}".format(k=k, v=', '.join(v)))
         print("── [*] SORTING COMPLETE")
 
-    def addtarget(self, type, defined_target):
-        self.base_targets_dict[type].append(defined_target)
-        logging.debug("{ty}: {ta}".format(ty=type, ta=defined_target))
+    def addtarget(self, _type, defined_target):
+        self.base_targets_dict[_type].append(defined_target)
+        logging.debug("{ty}: {ta}".format(ty=_type, ta=defined_target))
 
     def targettype(self, target):
         logging.debug("target = {t}".format(t=target))
@@ -51,7 +52,8 @@ class BaseTargetsFile():
         elif "-" in t:
             self.addtarget('range', target)
             logging.debug("RANGE: {t}".format(t=target))
-        elif re.search('^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', t):
+        elif re.search('^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
+                       t):
             self.addtarget('ip address', target)
             logging.debug("IP: {t}".format(t=target))
         elif "/32" in t:
@@ -105,7 +107,6 @@ class PortTargetsFile():
             infile = NmapParser.parse_fromfile(xml)
             for host in infile.hosts:
                 if host.services:
-                    address = host.address
                     for s in host.services:
                         if s.state != 'closed':
                             self.port_targets_dict[host.address].add(s.port)
@@ -114,6 +115,6 @@ class PortTargetsFile():
     def writecsv(self, port_targets):
         with open(port_targets, 'w') as outfile:
             writer = csv.writer(outfile)
-            for k,v in self.port_targets_dict.items():
-                v= list(v)
+            for k, v in self.port_targets_dict.items():
+                v = list(v)
                 writer.writerow([k] + v)
