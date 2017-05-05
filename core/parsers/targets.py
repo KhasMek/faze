@@ -8,6 +8,7 @@ import logging
 import re
 import sys
 
+from core.helpers.term import ctact, cterr, ctinfo
 from core.parsers.config import ParseConfig
 from core.parsers.xml import Xml
 from core.services.logwriter import LoggingManager
@@ -24,15 +25,15 @@ class BaseTargetsFile:
         self.base_targets_dict = parseconfig.base_targets_dict
 
     def main(self):
-        print("── [┬] SORTING TARGETS BY TYPE")
+        print("{a} SORTING TARGETS BY TYPE".format(a=ctact))
         self.parsebasetargets(self.base_targets)
         for k, v in sorted(self.base_targets_dict.items()):
             wrapper = TextWrapper(initial_indent="", subsequent_indent="    │\t\t\t")
             # TODO: format output to match fping
-            print("    ├─── {ty} \t{ta}"
-                  .format(ty=k.upper() + ":", ta=wrapper.fill(", ".join(v))))
+            print("{i}   {ty} \t{ta}"
+                  .format(i=ctinfo, ty=k.upper() + ":", ta=wrapper.fill(", ".join(v))))
             logging.info("{k}: {v}".format(k=k, v=', '.join(v)))
-        print("── [*] SORTING COMPLETE")
+        print("{i} SORTING COMPLETE".format(i=ctinfo))
 
     def addtarget(self, _type, defined_target):
         self.base_targets_dict[_type].append(defined_target)
@@ -63,7 +64,7 @@ class BaseTargetsFile:
             self.addtarget('subnet', target)
             logging.debug("SUBNET: {t}".format(t=target))
         else:
-            print("── [!] UNKNOWN: {t}".format(t=target))
+            print("{e} UNKNOWN: {t}".format(e=cterr, t=target))
             logging.warning("{t} is an unknown IP type!".format(t=target))
 
     def parsebasetargets(self, base_targets):
@@ -78,9 +79,9 @@ class BaseTargetsFile:
                     self.targettype(target)
                     logging.debug(target)
         except FileNotFoundError:
-            print(("── [!] TARGETS FILE ({bt}) NOT FOUND!".format(bt=base_targets)))
+            print(("{e} TARGETS FILE ({bt}) NOT FOUND!".format(e=cterr, bt=base_targets)))
             logging.error("TARGETS FILE NOT FOUND!!! QUITTING!!!")
-            sys.exit("── [!] QUITTING!")
+            sys.exit("{e} QUITTING!".format(e=cterr))
 
 
 # TODO: - Add support for Qualys/Nessus xml's
@@ -95,7 +96,7 @@ class PortTargetsFile():
         self.phase1 = parseconfig.directories[0]
 
     def main(self):
-        print("── [┬] SORTING UP TARGETS WITH OPEN PORTS")
+        print("{i} SORTING UP TARGETS WITH OPEN PORTS".format(i=ctinfo))
         xml = Xml()
         xml.validatenmapxml(self.phase1)
         self.parsehosts(self.files_to_parse)

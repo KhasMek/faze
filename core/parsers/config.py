@@ -6,6 +6,7 @@ import os
 import sys
 
 from collections import defaultdict
+from core.helpers.term import ctact, cterr
 
 config = configparser.ConfigParser()
 config_file = "faze.cfg"
@@ -15,15 +16,15 @@ _rootpathcfg = os.path.join(os.path.dirname(sys.modules['__main__'].__file__),
 _homedircfg = os.path.join(os.path.expanduser('~'), "faze", config_file)
 
 if _rootpathcfg:
-    print("── [*] LOADING CONFIG FILE - {p}".format(p=_rootpathcfg))
+    print("{a} LOADING CONFIG FILE - {p}".format(a=ctact, p=_rootpathcfg))
     config.read(_rootpathcfg)
     _loaded = True
 if os.path.isfile(config_file):
-    print("── [*] LOADING CONFIG FILE - ./{p}".format(p=config_file))
+    print("{a} LOADING CONFIG FILE - ./{p}".format(a=ctact, p=config_file))
     config.read(config_file)
     _loaded = True
 if not _loaded:
-    print("── [!] NO CONFIG FILE FOUND! QUITTING!")
+    print("{e} NO CONFIG FILE FOUND! QUITTING!".format(e=cterr))
     sys.exit()
 
 

@@ -8,6 +8,7 @@ import logging
 import nmap
 import re
 
+from core.helpers.term import ctact, ctinfo
 from core.parsers.config import ParseConfig
 from queue import Queue
 from threading import Thread
@@ -50,7 +51,7 @@ class NMap:
         nmap_threads = int(self.parseconfig.nmap_threads)
         outdir = self.parseconfig.nmap_phase_2_outdir
         phase_2_scripts = self.parseconfig.nmap_phase_2_scripts
-        print("── [┬] RUNNING NMAP WITH PHASE-2 SCRIPTS")
+        print("{a} RUNNING NMAP WITH PHASE-2 SCRIPTS".format(a=ctact))
         queue = Queue()
         logging.debug("Phase-2 nmap targets: {t}".format(t=targets))
         logging.debug("Phase-2 nmap scripts: {s}".format(s=phase_2_scripts))
@@ -70,7 +71,7 @@ class NMap:
                 xml = self.parsefilename(target, outdir, flag.strip())
                 queue.put((target, nmap_ports, flag, xml))
         queue.join()
-        print("── [*] NMAP COMPLETE")
+        print("{i} NMAP COMPLETE".format(i=ctinfo))
         logging.debug("COMPLETED - nmap phase-2")
 
     @staticmethod
@@ -94,45 +95,45 @@ class NMap:
 
     def printresults(self, results):
         logging.debug("{r}".format(r=results))
-        print("    ├─┬─ {c}".format(c=self.nm.command_line()))
+        print("{i}   {c}".format(i=ctinfo, c=self.nm.command_line()))
         for host in results:
-            print("    │ ├─┬─ Host: {h} ({hn})"
-                  .format(h=host, hn=self.nm[host].hostname()))
-            print("    │ │ └─── State: {s}".format(s=self.nm[host].state()))
+            print("{i}     Host: {h} ({hn})"
+                  .format(i=ctinfo, h=host, hn=self.nm[host].hostname()))
+            print("{i}       State: {s}".format(i=ctinfo, s=self.nm[host].state()))
             for proto in self.nm[host].all_protocols():
-                print("    │ │        Protocol: {p}".format(p=proto.upper()))
+                print("{i}         Protocol: {p}".format(i=ctinfo, p=proto.upper()))
                 ports = sorted(self.nm[host][proto].keys())
                 for port in ports:
-                    print("    │ │          {p}\t{n}"
-                          .format(p=port, n=self.nm[host][proto][port]['name']))
-        print("    │ └─ COMPLETE!")
+                    print("{i}           {p}\t{n}"
+                          .format(i=ctinfo, p=port, n=self.nm[host][proto][port]['name']))
+        print("{i}  COMPLETE!".format(i=ctinfo))
 
     def runnmap(self, target, nmap_ports, flag, xml):
         # -sP may output a different json format?
         logging.debug("RUNNING NMAP ON: {t} {p} {f} {x}"
                       .format(t=target, p=nmap_ports, f=flag, x=xml))
         if [variable for variable in flag.split() if "-sP" in variable]:
-            print("    ├── nmap {f} {t}"
-                  .format(f=flag, t=target))
+            print("{a}  nmap {f} {t}"
+                  .format(a=ctact, f=flag, t=target))
             logging.info("Running nmap on {t} with flags '{f}'"
                          .format(t=target, f=flag))
             self.nm.scan(hosts=target, arguments=flag)
         if [variable for variable in flag.split() if "-sn" in variable]:
-            print("    ├── nmap {f} {t}"
-                  .format(f=flag, t=target))
+            print("{a}  nmap {f} {t}"
+                  .format(a=ctact, f=flag, t=target))
             logging.info("Running nmap on {t} with flags '{f}'"
                          .format(t=target, f=flag))
             self.nm.scan(hosts=target, arguments=flag)
             # Check if nmap commands need root/sudo.
         elif [variable for variable in flag.split() if ("-sF" or "-sU") in variable]:
-            print("    ├── nmap {f} {t}"
-                  .format(f=flag, t=target))
+            print("{a} nmap {f} {t}"
+                  .format(a=ctact, f=flag, t=target))
             logging.info("Running nmap on {t} with flags '{f}'"
                          .format(t=target, f=flag))
             self.nm.scan(hosts=target, arguments=flag, sudo=True)
         else:
-            print("    ├── nmap {f} {t} {p}"
-                  .format(f=flag, t=target, p=nmap_ports))
+            print("{a} nmap {f} {t} {p}"
+                  .format(a=ctact, f=flag, t=target, p=nmap_ports))
             logging.info("Running nmap on {t} with flags '{f}'"
                          .format(t=target, f=flag))
             self.nm.scan(hosts=target, arguments=flag, ports=nmap_ports)
@@ -153,7 +154,7 @@ class NMap:
         logging.debug("XML FILENAME WRITTEN: {x}".format(x=xml))
 
     def queuenmap(self, target_dict, nmap_ports, nmap_flags, nmap_threads, outdir):
-        print("── [┬] RUNNING NMAP AGAINST TARGETS LIST")
+        print("{a} RUNNING NMAP AGAINST TARGETS LIST".format(a=ctact))
         queue = Queue()
         for x in range(nmap_threads):
             logging.debug("Nmap thread number {x}".format(x=x))
@@ -169,4 +170,4 @@ class NMap:
                     xml = self.parsefilename(target, outdir, flag.strip())
                     queue.put((target, nmap_ports, flag, xml))
         queue.join()
-        print("── [*] NMAP COMPLETE")
+        print("{a} NMAP COMPLETE".format(a=ctact))

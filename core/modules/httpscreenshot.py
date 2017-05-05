@@ -9,6 +9,7 @@ import os
 import subprocess
 
 from core.helpers.misc import ChangeDir
+from core.helpers.term import ctact, ctinfo
 from core.parsers.config import ParseConfig
 from core.services.logwriter import LoggingManager
 
@@ -23,11 +24,11 @@ class HttpScreenshot:
         self.outdir = os.path.abspath(parseconfig.httpscreenshot_outdir)
 
     def main(self):
-        print("── [┬] RUNNING HTTPSCREENSHOT AGAINST WWW HOSTS")
+        print("{a} RUNNING HTTPSCREENSHOT AGAINST WWW HOSTS".format(a=ctact))
         logging.debug("STARTING - httpscreenshot")
         self.httpscreenshotxmls(self.indir,
                                 self.outdir, self.workers)
-        print("── [*] HTTPSCREENSHOT COMPLETE!")
+        print("{i} HTTPSCREENSHOT COMPLETE!".format(i=ctinfo))
         logging.debug("COMPLETED - httpscreenshot")
 
     @staticmethod

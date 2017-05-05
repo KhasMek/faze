@@ -6,6 +6,7 @@ Run fping on targets list
 import logging
 import subprocess
 
+from core.helpers.term import ctact, ctinfo
 from core.parsers.config import ParseConfig
 from core.services.logwriter import LoggingManager
 from textwrap import TextWrapper
@@ -25,12 +26,12 @@ class Fping:
         logging.info("FINISHED - fping")
 
     def fping(self, cmd):
-        print("    ├─┬─ {c}".format(c=' '.join(cmd)))
+        print("{i} {c}".format(i=ctinfo, c=' '.join(cmd)))
         logging.info(' '.join(cmd))
         command = subprocess.run(cmd, stdout=subprocess.PIPE,
                                  stderr=subprocess.DEVNULL, universal_newlines=True, shell=False)
-        wrapper = TextWrapper(initial_indent="    │ └─── ",
-                              subsequent_indent="    │\t   ")
+        wrapper = TextWrapper(initial_indent="{i}   ".format(i=ctinfo),
+                              subsequent_indent="{i}     ".format(i=ctinfo))
         if len(command.stdout.split("\n")) > 2:
             output = wrapper.fill(command.stdout.replace("\n", ", "))
             output = output.rstrip(',')
@@ -82,7 +83,7 @@ class Fping:
                 self.fping(cmd)
 
     def runfping(self, base_targets_dict):
-        print("── [┬] FPING")
+        print("{a} FPING".format(a=ctact))
         for _type, targets in base_targets_dict.items():
             if "subnet" in _type:
                 self.fpingsubnet(targets)
@@ -92,4 +93,4 @@ class Fping:
                 self.fpinghostname(targets)
             if "range" in _type:
                 self.fpingrange(targets)
-        print("── [*] FPING COMPLETE")
+        print("{i} FPING COMPLETE".format(i=ctinfo))

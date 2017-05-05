@@ -6,6 +6,7 @@ woo nikto scanning
 import logging
 import subprocess
 
+from core.helpers.term import ctact, ctinfo
 from core.parsers.xml import NmapXML
 from core.parsers.config import ParseConfig
 
@@ -19,10 +20,10 @@ class Nikto:
         self.filetype = parseconfig.nikto_filetype
 
     def main(self):
-        print("── [┬] RUNNING NIKTO AGAINST WEB HOSTS")
+        print("{a} RUNNING NIKTO AGAINST WEB HOSTS".format(a=ctact))
         logging.debug("STARTING - nikto")
         self.runnikto(self.www_targets, self.outdir, self.nikto_path, self.filetype)
-        print("── [*] NIKTO COMPLETE")
+        print("{i} NIKTO COMPLETE".format(i=ctinfo))
         logging.debug("COMPLETED - nikto")
 
     @staticmethod
@@ -46,11 +47,11 @@ class Nikto:
                 "-Format",
                 filetype
             ]
-            print("    ├─┬─ TARGET: {h}:{p} ({s})"
-                  .format(h=host, p=port, s=service))
-            print("    │ ├─── {c}".format(c=' '.join(command)))
+            print("{i}   TARGET: {h}:{p} ({s})"
+                  .format(i=ctinfo, h=host, p=port, s=service))
+            print("{i}     {c}".format(i=ctinfo, c=' '.join(command)))
             # TODO: This needs a try and except for FileNotFoundError
             logging.info("Running {c}".format(c=' '.join(command)))
             subprocess.run(command, stdout=subprocess.DEVNULL, stderr=None,
                            shell=False)
-            print("    │ └─ COMPLETE: {h}:{p}".format(h=host, p=port))
+            print("{i}   COMPLETE: {h}:{p}".format(i=ctinfo, h=host, p=port))

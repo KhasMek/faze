@@ -6,6 +6,7 @@ wooo module for writing logs
 import logging
 import os
 
+from core.helpers.term import ctinfo
 from core.parsers.config import ParseConfig
 
 parseconfig = ParseConfig()
@@ -23,7 +24,7 @@ class LogToFile:
     def __init__(self, log_level):
         log_filename = parseconfig.log_filename
         if not os.path.isfile(log_filename):
-            print("── [*] CREATING LOGFILE")
+            print("{i} CREATING LOGFILE".format(i=ctinfo))
             try:
                 os.makedirs(os.path.dirname(parseconfig.log_filename), exist_ok=True)
             # Log file will be created in cwd.

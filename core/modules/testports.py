@@ -10,6 +10,7 @@ woo testing for open tcp/udp ports
 import csv
 import socket
 
+from core.helpers.term import ctinfo
 from core.parsers.config import ParseConfig
 
 parseconfig = ParseConfig()
@@ -22,7 +23,7 @@ class TCPPorts:
 
     def main(self):
         self.parsecsv(self.port_targets)
-        print("── [*] PORT TESTING COMPLETE!")
+        print("{i} PORT TESTING COMPLETE!".format(i=ctinfo))
 
     # TODO: parsing csv's just needs to be it's own module
     def parsecsv(self, port_targets):
@@ -37,8 +38,8 @@ class TCPPorts:
 
     def testtcpports(self, host, ports):
         results = open(self.tcp_port_results, 'a+')
-        print("    ├─┬─ {h}".format(h=host))
-        print("    │ └─── Protocol: TCP")
+        print("{i}   {h}".format(i=ctinfo, h=host))
+        print("{i}     Protocol: TCP".format(i=ctinfo))
         results.write(host + '\n')
         for port in ports:
             port = int(port)
@@ -46,12 +47,12 @@ class TCPPorts:
             s.settimeout(5)
             try:
                 s.connect((host, port))
-                yeh = str('    │        [*] Port: ' + str(port))
+                yeh = str(ctinfo + '       [*] Port: ' + str(port))
                 print(yeh)
                 results.write(yeh + '\n')
                 s.close()
             except:
-                neh = str('    │        [ ] Port: ' + str(port))
+                neh = str(ctinfo + '       [ ] Port: ' + str(port))
                 print(neh)
                 results.write(neh + '\n')
                 pass

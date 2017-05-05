@@ -6,6 +6,7 @@ wooo working dir structure creation
 import logging
 import os
 
+from core.helpers.term import ctinfo, ctact, cterr
 from core.services.logwriter import LoggingManager
 from core.parsers.config import ParseConfig
 
@@ -18,10 +19,10 @@ class CreateStructure:
         self.files = parseconfig.files
 
     def main(self):
-        print("── [┬] BOOTSTRAPPING WORKING DIRS")
+        print("{a} BOOTSTRAPPING WORKING DIRS".format(a=ctact))
         self.mkdirs(self.directories)
         self.mkfiles(self.files)
-        print("── [*] BOOTSTRAPPING COMPLETE")
+        print("{i} BOOTSTRAPPING COMPLETE".format(i=ctinfo))
 
     @staticmethod
     def mkdirs(directories):
@@ -31,10 +32,10 @@ class CreateStructure:
             if not os.path.exists(_dir):
                 os.makedirs(_dir, exist_ok=True)
                 logging.info("{d} created".format(d=_dir))
-                print("    ├─── {d}".format(d=_dir))
+                print("{i}   {d}".format(i=ctinfo, d=_dir))
             else:
                 logging.warning("{d} already exists!".format(d=_dir))
-                print("   [!]── {d} already exists, skipping!".format(d=_dir))
+                print("{e}   {d} already exists, skipping!".format(e=cterr, d=_dir))
 
     @staticmethod
     def mkfiles(files):
@@ -44,9 +45,7 @@ class CreateStructure:
             if not os.path.exists(file):
                 open(file, 'w').close()
                 logging.info("{f} created".format(f=file))
-                print("    ├─── {f}"
-                    .format(f=file))
+                print("{i}   {f}".format(i=ctinfo, f=file))
             else:
                 logging.warning("{f} already exists, skipping!".format(f=file))
-                print("   [!]── {f} already exists, skipping!"
-                    .format(f=file))
+                print("{e}   {f} already exists, skipping!".format(e=cterr, f=file))

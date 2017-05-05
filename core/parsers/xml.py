@@ -7,6 +7,7 @@ import os
 import logging
 import xml.etree.ElementTree as ET
 
+from core.helpers.term import cterr
 from core.parsers.config import ParseConfig
 from libnmap.parser import NmapParser
 from xml.etree.ElementTree import ParseError
@@ -27,7 +28,7 @@ class Xml:
                 files_to_parse.append(file)
             except ParseError:
                 logging.warning("{f} is malformed or not an xml".format(f=file))
-                print("── [!] {f} is malformed or not an xml".format(f=file))
+                print("{e} {f} is malformed or not an xml".format(e=cterr, f=file))
                 pass
             except IOError:
                 # File is a directory.
