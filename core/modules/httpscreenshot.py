@@ -9,7 +9,7 @@ import os
 import subprocess
 
 from core.helpers.misc import ChangeDir
-from core.helpers.term import ctact, ctinfo
+from core.helpers.term import ctact, cterr, ctinfo
 from core.parsers.config import ParseConfig
 from core.services.logwriter import LoggingManager
 
@@ -40,7 +40,7 @@ class HttpScreenshot:
                 if not ("-sn-" or "-sP-") in file:
                     file = os.path.join(indir, file)
                     if 'nmap' in file:
-                        command = [
+                        cmd = [
                             "python",
                             path,
                             "-i",
@@ -51,7 +51,13 @@ class HttpScreenshot:
                             "-a",
                             "-vH"
                         ]
-                        # TODO: unify output with rest of program
-                        # TODO: add filename output if there is an issue parsing it.
-                        logging.info("Running {c}".format(c=' '.join(command)))
-                        subprocess.run(command, universal_newlines=True, shell=False)
+                        logging.info("Running {c}".format(c=' '.join(cmd)))
+                        command = subprocess.run(cmd, stdout=subprocess.PIPE,
+                                                 stderr=subprocess.PIPE, universal_newlines=True, shell=False)
+                        if command.stdout:
+                            for line in command.stdout[:-1].split("\n"):
+                                print("{i} {l}".format(i=ctinfo, l=line.split(' ', 1)[-1]))
+                        if command.stderr:
+                            print("{e} Error reading {f}".format(e=cterr, f=file))
+                            for line in command.stderr[:-1].split("\n"):
+                                print("{i} {l}".format(i=cterr, l=line.split(' ', 1)[-1]))
