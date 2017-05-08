@@ -93,4 +93,4 @@ class Fping:
                 self.fpinghostname(targets)
             if "range" in _type:
                 self.fpingrange(targets)
-        print("{i} FPING COMPLETE".format(i=ctinfo))
+        print("{a} FPING COMPLETE".format(a=ctact))
