@@ -87,10 +87,9 @@ class NMap:
             ending = t
         flags = re.sub(r'(?<=\w)\s(?=\w)|(?<=\w)([=])(?=\w)|(?<=\w)([/])(?=\w)|([-])([-])|(?<=\w)([.])(?=\w)', "_",
                        flags)
-        f = str("{o}/nmap{f}-{e}.xml"
-                .format(o=outdir, f=flags.replace(" ", ""), e=ending))
-        xml = open(f, 'a')
-        logging.debug("Filename for {t} - {f}".format(t=t, f=f))
+        xml = str("{o}/nmap{f}-{e}.xml"
+                  .format(o=outdir, f=flags.replace(" ", ""), e=ending))
+        logging.debug("Filename for {t} - {x}".format(t=t, x=xml))
         return xml
 
     def printresults(self, results):
@@ -149,7 +148,8 @@ class NMap:
         # else: if nm. is up or something like that?
         logging.debug("XML FILENAME: {x}".format(x=xml))
         results = self.nm.get_nmap_last_output()
-        xml.write(results)
+        with open(xml, 'a') as _xml:
+            _xml.write(results)
         logging.debug("RESULTS: {r}".format(r=results))
         logging.debug("XML FILENAME WRITTEN: {x}".format(x=xml))
 
