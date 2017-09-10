@@ -8,6 +8,7 @@ import logging
 import xml.etree.ElementTree as ET
 
 from core.helpers.term import cterr
+from core.helpers.misc import ResolveHostname
 from core.parsers.config import ParseConfig
 from libnmap.parser import NmapParser
 from xml.etree.ElementTree import ParseError
@@ -50,3 +51,23 @@ class NmapXML:
                         if "http" in s.service:
                             www_targets[address] = s.port, s.service
                             logging.debug("{a}:{p}".format(a=address, p=s.port))
+
+    @staticmethod
+    def is_fqdn():
+        files_to_parse = ParseConfig().files_to_parse
+        fqdn_targets = ParseConfig().fqdn_targets
+        for xml in files_to_parse:
+            infile = NmapParser.parse_fromfile(xml)
+            for host in infile.hosts:
+                if host.hostnames:
+                    for domain in host.hostnames:
+                        fqdn = ResolveHostname.resolve(domain)
+                        if fqdn:
+                            for s in host.services:
+                                if "https" in s.service:
+                                    fqdn_targets.append('https://' + domain)
+                                if "http" in s.service:
+                                    if "ssl" in s.tunnel:
+                                        fqdn_targets.append('https://' + domain)
+                                    else:
+                                        fqdn_targets.append('http://' + domain)

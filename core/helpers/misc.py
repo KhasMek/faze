@@ -3,6 +3,7 @@
 Random functions hang out here until they find a real home
 """
 import os
+import socket
 import sys
 
 from contextlib import contextmanager
@@ -32,3 +33,20 @@ class ChangeDir:
 
     def __exit__(self, etype, value, traceback):
         os.chdir(self.savedpath)
+
+
+class ResolveHostname:
+    """
+    Check if hostname is resolvable or not
+
+    from core.helpers.misc import ResolveHostname
+    resolve = ResolveHostname.resolve
+    resolve("google.com")
+    """
+    @staticmethod
+    def resolve(hostname):
+        try:
+            socket.gethostbyname(hostname)
+            return True
+        except socket.error:
+            return
