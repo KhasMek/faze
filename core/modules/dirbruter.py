@@ -58,11 +58,18 @@ class DirBruter:
         for wordlist in wordlist_files:
             with open(wordlist, 'r') as f:
                 for line in f.readlines():
-                    raw_words.add(line.rstrip())
+                    word = line.rstrip()
+                    # Let's prepend / right off the bat if it's not already there.
+                    if not word.startswith('/'):
+                        word = "/{w}".format(w=word)
+                    # Assume it's a directory (or API endpoint) if no file extension.
+                    if '.' not in word and not word.endswith('/'):
+                        word = "{w}/".format(w=word)
+                    raw_words.add(word)
         if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
             with open('final-dirbruter-wordlist.txt', 'w') as f:
                 for word in raw_words:
-                    f.write("{w}".format(w=word))
+                    f.write("{w}\n".format(w=word))
         words = Queue()
         for word in raw_words:
             logging.debug("Adding {w} to wordlist".format(w=word))
@@ -86,14 +93,7 @@ class DirBruter:
     def dir_bruter(self, target_url, word_queue, user_agent):
         results = {}
         while not word_queue.empty():
-            attempt = word_queue.get()
-            attempt_list = []
-            # Check to see if there's a file extension; if not
-            # it's probably a dir (or API endpoint).
-            if '.' not in attempt:
-                attempt_list.append("/{a}/".format(a=attempt))
-            else:
-                attempt_list.append("/{a}".format(a=attempt))
+            attempt_list = [word_queue.get()]
             for brute in attempt_list:
                 headers = {"User-Agent": user_agent}
                 request = requests.get(target_url + brute, headers=headers, verify=False)
