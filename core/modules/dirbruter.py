@@ -9,6 +9,7 @@ from core.parsers.config import ParseConfig
 from core.parsers.xml import NmapXML
 from core.services.logwriter import LoggingManager
 from multiprocessing import Queue
+from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from textwrap import TextWrapper
 
@@ -92,11 +93,14 @@ class DirBruter:
 
     def dir_bruter(self, target_url, word_queue, user_agent):
         results = {}
+        session = requests.Session()
+        session.mount(target_url.split(':', 1)[0], HTTPAdapter(max_retries=3))
         while not word_queue.empty():
+            # attempt = word_queue.get()
             attempt_list = [word_queue.get()]
             for brute in attempt_list:
                 headers = {"User-Agent": user_agent}
-                request = requests.get(target_url + brute, headers=headers, verify=False)
+                request = session.get(target_url + brute, headers=headers, verify=False)
                 if request.status_code == 200:
                     print("{i}     [{r}] => {u}".format(i=ctinfo, r=request.status_code, u=request.url))
                     logging.info("{i}     [{r}] => {u}".format(i=ctinfo, r=request.status_code, u=request.url))
