@@ -92,6 +92,12 @@ class ParseConfig:
     nikto_path = config['NIKTO']['path']
     nikto_filetype = config['NIKTO']['filetype']
 
+    # DIRBRUTER
+    dirbruter_enabled = config['DIRBRUTER']['enabled']
+    dirbruter_outdir = config['DIRBRUTER']['outdir']
+    dirbruter_wordlist_files = json.loads(config['DIRBRUTER']['wordlist_files'])
+    dirbuter_ua = config['DIRBRUTER']['user_agent']
+
     # NESSUS
     nessus_enabled = config['NESSUS']['enabled']
     nessus_scan_name = config['NESSUS']['scan_name']

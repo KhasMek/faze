@@ -4,3 +4,4 @@ nessrest
 pygeoip
 python-nmap
 python-libnmap
+requests

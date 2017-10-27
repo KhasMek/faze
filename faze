@@ -6,6 +6,7 @@ Main executable for module
 from datetime import datetime
 from core.bootstrap.structure import CreateStructure
 from core.helpers.term import ctinfo
+from core.modules.dirbruter import DirBruter
 from core.modules.fping import Fping
 from core.modules.httpscreenshot import HttpScreenshot
 from core.modules.nessus import Nessus
@@ -58,6 +59,11 @@ if __name__ == "__main__":
     if parseconfig.nikto_enabled:
         nikto = Nikto()
         nikto.main()
+
+    # DIRBRUTER
+    if parseconfig.dirbruter_enabled:
+        dirbruter = DirBruter()
+        dirbruter.main()
 
     # NMAP PHASE-2
     if parseconfig.nmap_phase_2_enabled:
