@@ -4,11 +4,11 @@ import json
 import logging
 import requests
 
+from core.helpers.misc import build_wordlist
 from core.helpers.term import ctact, cterr, ctinfo
 from core.parsers.config import ParseConfig
 from core.parsers.xml import NmapXML
 from core.services.logwriter import LoggingManager
-from multiprocessing import Queue
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from textwrap import TextWrapper
@@ -40,7 +40,7 @@ class DirBruter:
                 logging.info("{a}   TARGET: {t}".format(a=ctact, t=target_url))
                 if self.check_no_redirect(target_url):
                     logging.info("Building wordlist for {u}".format(u=target_url))
-                    word_queue = self.build_wordlist(wordlist_files)
+                    word_queue = build_wordlist(wordlist_files, "{o}/merged-dirbruter-wordlist.txt".format(o=outdir))
                     logging.info("Wordlist built")
                     json_results = self.dir_bruter(target_url, word_queue, user_agent)
                     json_output[target_url] = json_results
@@ -53,29 +53,6 @@ class DirBruter:
             logging.info("{i}     0 FQDN Hostnames found! Skipping...".format(i=ctinfo))
         print("{i} DIRBRUTER COMPLETE!".format(i=ctinfo))
         logging.info("COMPLETED - DirBruter")
-
-    def build_wordlist(self, wordlist_files):
-        raw_words = set()
-        for wordlist in wordlist_files:
-            with open(wordlist, 'r') as f:
-                for line in f.readlines():
-                    word = line.rstrip()
-                    # Let's prepend / right off the bat if it's not already there.
-                    if not word.startswith('/'):
-                        word = "/{w}".format(w=word)
-                    # Assume it's a directory (or API endpoint) if no file extension.
-                    if '.' not in word and not word.endswith('/'):
-                        word = "{w}/".format(w=word)
-                    raw_words.add(word)
-        if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
-            with open('final-dirbruter-wordlist.txt', 'w') as f:
-                for word in raw_words:
-                    f.write("{w}\n".format(w=word))
-        words = Queue()
-        for word in raw_words:
-            logging.debug("Adding {w} to wordlist".format(w=word))
-            words.put(word)
-        return words
 
     def check_no_redirect(self, url):
         request = requests.get(url, allow_redirects=False, verify=False)
