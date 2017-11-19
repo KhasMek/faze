@@ -61,6 +61,7 @@ class ParseConfig:
     port_targets_dict = defaultdict(set)
     www_targets = {}
     fqdn_targets = []
+    tld_targets = []
 
     # LOGGING AND MESSAGING SERVICES
     log_level = config['SERVICES']['log_level']
