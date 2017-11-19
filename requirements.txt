@@ -5,3 +5,4 @@ pygeoip
 python-nmap
 python-libnmap
 requests
+tldextract

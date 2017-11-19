@@ -7,6 +7,7 @@ import csv
 import logging
 import re
 import sys
+import tldextract
 
 from core.helpers.term import ctact, cterr, ctinfo
 from core.parsers.config import ParseConfig
@@ -82,6 +83,18 @@ class BaseTargetsFile:
             print(("{e} TARGETS FILE ({bt}) NOT FOUND!".format(e=cterr, bt=base_targets)))
             logging.error("TARGETS FILE NOT FOUND!!! QUITTING!!!")
             sys.exit("{e} QUITTING!".format(e=cterr))
+
+    def parse_tlds(self):
+        tld_targets = parseconfig.tld_targets
+        www_targets = parseconfig.www_targets
+        if 'hostname' in self.base_targets_dict:
+            for hostname in self.base_targets_dict['hostname']:
+                breakdown = tldextract.extract(hostname)
+                tld_targets.append(breakdown.registered_domain)
+        if len(www_targets) > 0:
+            for hostname in www_targets:
+                breakdown = tldextract.extract(hostname)
+                tld_targets.append(breakdown.registered_domain)
 
 
 # TODO: - Add support for Qualys/Nessus xml's
