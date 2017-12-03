@@ -40,7 +40,7 @@ class DirBruter:
                 logging.info("{a}   TARGET: {t}".format(a=ctact, t=target_url))
                 if self.check_no_redirect(target_url):
                     logging.info("Building wordlist for {u}".format(u=target_url))
-                    word_queue = build_wordlist(wordlist_files, "{o}/merged-dirbruter-wordlist.txt".format(o=outdir))
+                    word_queue = build_wordlist(wordlist_files, 'subdirectory', "{o}/merged-dirbruter-wordlist.txt".format(o=outdir))
                     logging.info("Wordlist built")
                     json_results = self.dir_bruter(target_url, word_queue, user_agent)
                     json_output[target_url] = json_results
