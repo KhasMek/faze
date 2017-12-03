@@ -54,32 +54,37 @@ class ResolveHostname:
             return
 
 
-def build_wordlist(wordlist_files, outfile=None):
+def build_wordlist(wordlist_files, kind=None, outfile=None):
     """
     Merge, sort and drop duplicates into a master wordlist file
     and write to disk if requested.
     :param wordlist_files:
+    :param kind:
     :param outfile:
     :return:
     """
     raw_words = set()
+    logging.debug("Building wordlist with files - {wl} with kind set to - {k} to outfile - {o}"
+                  .format(wl=wordlist_files, k=kind, o=outfile))
     for wordlist in wordlist_files:
         with open(wordlist, 'r') as f:
             for line in f.readlines():
                 word = line.rstrip()
-                # Let's prepend / right off the bat if it's not already there.
-                if not word.startswith('/'):
-                    word = "/{w}".format(w=word)
-                # Assume it's a directory (or API endpoint) if no file extension.
-                if '.' not in word and not word.endswith('/'):
-                    word = "{w}/".format(w=word)
+                if kind is "subdirectory":
+                    # Let's prepend / right off the bat if it's not already there.
+                    if not word.startswith('/'):
+                        word = "/{w}".format(w=word)
+                    # Assume it's a directory (or API endpoint) if no file extension.
+                    if '.' not in word and not word.endswith('/'):
+                        word = "{w}/".format(w=word)
                 raw_words.add(word)
-    if logging.getLogger().getEffectiveLevel() == logging.DEBUG and outfile:
+    if logging.getLogger().getEffectiveLevel() == logging.DEBUG and outfile or kind is "subdomain":
         with open(outfile, 'w') as f:
             for word in raw_words:
                 f.write("{w}\n".format(w=word))
     words = Queue()
-    for word in raw_words:
-        logging.debug("Adding {w} to wordlist".format(w=word))
-        words.put(word)
-    return words
+    if kind is not "subdomain":
+        for word in raw_words:
+            logging.debug("Adding {w} to wordlist".format(w=word))
+            words.put(word)
+        return words
