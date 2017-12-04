@@ -68,6 +68,18 @@ class ParseConfig:
     log_to_file = config['SERVICES']['log_to_file']
     log_filename = config['SERVICES']['log_filename']
 
+    # SUBBRUTER
+    subbruter_enabled = config['SUBBRUTER']['enabled']
+    subbruter_add_discovered_domains = config['SUBBRUTER']['add_discovered_domains']
+    subbruter_threads = config['SUBBRUTER']['threads']
+    subbruter_bruteforce_dns_enabled = config['SUBBRUTER']['bruteforce_dns_enabled']
+    subbruter_domain_wordlists = json.loads(config['SUBBRUTER']['domain_wordlists'])
+    subbruter_outdir = config['SUBBRUTER']['outdir']
+    subbruter_gobuster_path = config['SUBBRUTER']['gobuster_path']
+    subbruter_reconng_path = config['SUBBRUTER']['reconng_path']
+    subbruter_sublister_path = config['SUBBRUTER']['sublister_path']
+    subbruter_altdns_path = config['SUBBRUTER']['altdns_path']
+
     # FPING
     fping_enabled = config['FPING']['enabled']
     fping_path = config['FPING']['path']

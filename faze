@@ -12,6 +12,7 @@ from core.modules.httpscreenshot import HttpScreenshot
 from core.modules.nessus import Nessus
 from core.modules.nikto import Nikto
 from core.modules.nmap import NMap
+from core.modules.subbruter import SubBruter
 from core.modules.testports import TCPPorts
 from core.parsers.targets import BaseTargetsFile, PortTargetsFile
 from core.parsers.config import ParseConfig
@@ -29,6 +30,11 @@ if __name__ == "__main__":
     # TARGETS
     basetargetsfile = BaseTargetsFile()
     basetargetsfile.main()
+
+    # SUBBRUTER
+    if parseconfig.subbruter_enabled:
+        subbruter = SubBruter()
+        subbruter.main()
 
     # FPING
     if parseconfig.fping_enabled:
