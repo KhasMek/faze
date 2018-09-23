@@ -6,7 +6,7 @@ import os
 import sys
 
 from collections import defaultdict
-from core.helpers.term import ctact, cterr
+from faze.core.helpers.term import ctact, cterr
 
 config = configparser.ConfigParser()
 config_file = "faze.cfg"

@@ -9,10 +9,10 @@ import re
 import sys
 import tldextract
 
-from core.helpers.term import ctact, cterr, ctinfo
-from core.parsers.config import ParseConfig
-from core.parsers.xml import Xml
-from core.services.logwriter import LoggingManager
+from faze.core.helpers.term import ctact, cterr, ctinfo
+from faze.core.parsers.config import ParseConfig
+from faze.core.parsers.xml import Xml
+from faze.core.services.logwriter import LoggingManager
 from libnmap.parser import NmapParser
 from textwrap import TextWrapper
 

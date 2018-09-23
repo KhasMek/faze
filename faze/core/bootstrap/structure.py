@@ -6,9 +6,9 @@ wooo working dir structure creation
 import logging
 import os
 
-from core.helpers.term import ctinfo, ctact, cterr
-from core.services.logwriter import LoggingManager
-from core.parsers.config import ParseConfig
+from faze.core.helpers.term import ctinfo, ctact, cterr
+from faze.core.services.logwriter import LoggingManager
+from faze.core.parsers.config import ParseConfig
 
 
 class CreateStructure:

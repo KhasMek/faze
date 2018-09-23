@@ -9,9 +9,9 @@ import requests
 import sys
 import time
 
-from core.helpers.misc import suppress_stdout
-from core.helpers.term import ctact, ctinfo
-from core.parsers.config import ParseConfig
+from faze.core.helpers.misc import suppress_stdout
+from faze.core.helpers.term import ctact, ctinfo
+from faze.core.parsers.config import ParseConfig
 from itertools import zip_longest
 from nessrest import ness6rest
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -75,7 +75,6 @@ class Nessus:
             output = str(scan.download_scan(export_format="nessus"))
         return output
 
-    @staticmethod
     def scanstatus(tag_id, uuid, url, api_akey, api_skey, insecure):
         running = True
         counter = 0

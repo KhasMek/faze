@@ -6,9 +6,9 @@ woo nikto scanning
 import logging
 import subprocess
 
-from core.helpers.term import ctact, ctinfo
-from core.parsers.xml import NmapXML
-from core.parsers.config import ParseConfig
+from faze.core.helpers.term import ctact, ctinfo
+from faze.core.parsers.xml import NmapXML
+from faze.core.parsers.config import ParseConfig
 
 
 class Nikto:

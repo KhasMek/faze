@@ -4,18 +4,18 @@ Main executable for module
 """
 
 from datetime import datetime
-from core.bootstrap.structure import CreateStructure
-from core.helpers.term import ctinfo
-from core.modules.dirbruter import DirBruter
-from core.modules.fping import Fping
-from core.modules.httpscreenshot import HttpScreenshot
-from core.modules.nessus import Nessus
-from core.modules.nikto import Nikto
-from core.modules.nmap import NMap
-from core.modules.subbruter import SubBruter
-from core.modules.testports import TCPPorts
-from core.parsers.targets import BaseTargetsFile, PortTargetsFile
-from core.parsers.config import ParseConfig
+from faze.core.bootstrap.structure import CreateStructure
+from faze.core.helpers.term import ctinfo
+from faze.core.modules.dirbruter import DirBruter
+from faze.core.modules.fping import Fping
+from faze.core.modules.httpscreenshot import HttpScreenshot
+from faze.core.modules.nessus import Nessus
+from faze.core.modules.nikto import Nikto
+from faze.core.modules.nmap import NMap
+from faze.core.modules.subbruter import SubBruter
+from faze.core.modules.testports import TCPPorts
+from faze.core.parsers.targets import BaseTargetsFile, PortTargetsFile
+from faze.core.parsers.config import ParseConfig
 
 if __name__ == "__main__":
     parseconfig = ParseConfig()

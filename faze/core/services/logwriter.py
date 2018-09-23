@@ -6,8 +6,8 @@ wooo module for writing logs
 import logging
 import os
 
-from core.helpers.term import ctinfo
-from core.parsers.config import ParseConfig
+from faze.core.helpers.term import ctinfo
+from faze.core.parsers.config import ParseConfig
 
 parseconfig = ParseConfig()
 
@@ -30,6 +30,7 @@ class LogToFile:
             # Log file will be created in cwd.
             except FileNotFoundError:
                 pass
+        # maybe add some more detail to the log, like FORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s"
         logging.basicConfig(format='[%(levelname)s]\t (%(asctime)s): %(message)s',
                             datefmt='%Y-%m-%d %H:%M:%S %z', filename=log_filename, level=log_level)
 

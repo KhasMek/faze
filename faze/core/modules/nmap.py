@@ -8,8 +8,8 @@ import logging
 import nmap
 import re
 
-from core.helpers.term import ctact, ctinfo
-from core.parsers.config import ParseConfig
+from faze.core.helpers.term import ctact, ctinfo
+from faze.core.parsers.config import ParseConfig
 from queue import Queue
 from threading import Thread
 

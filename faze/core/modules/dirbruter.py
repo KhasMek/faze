@@ -4,11 +4,11 @@ import json
 import logging
 import requests
 
-from core.helpers.misc import build_wordlist
-from core.helpers.term import ctact, cterr, ctinfo
-from core.parsers.config import ParseConfig
-from core.parsers.xml import NmapXML
-from core.services.logwriter import LoggingManager
+from faze.core.helpers.misc import build_wordlist
+from faze.core.helpers.term import ctact, cterr, ctinfo
+from faze.core.parsers.config import ParseConfig
+from faze.core.parsers.xml import NmapXML
+from faze.core.services.logwriter import LoggingManager
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from textwrap import TextWrapper

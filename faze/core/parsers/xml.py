@@ -7,9 +7,9 @@ import os
 import logging
 import xml.etree.ElementTree as ET
 
-from core.helpers.term import cterr
-from core.helpers.misc import ResolveHostname
-from core.parsers.config import ParseConfig
+from faze.core.helpers.term import cterr
+from faze.core.helpers.misc import ResolveHostname
+from faze.core.parsers.config import ParseConfig
 from libnmap.parser import NmapParser
 from xml.etree.ElementTree import ParseError
 

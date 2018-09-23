@@ -6,9 +6,9 @@ Run fping on targets list
 import logging
 import subprocess
 
-from core.helpers.term import ctact, ctinfo
-from core.parsers.config import ParseConfig
-from core.services.logwriter import LoggingManager
+from faze.core.helpers.term import ctact, ctinfo
+from faze.core.parsers.config import ParseConfig
+from faze.core.services.logwriter import LoggingManager
 from textwrap import TextWrapper
 
 

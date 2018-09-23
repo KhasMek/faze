@@ -20,11 +20,11 @@ pip install -q -r altdns/requirements.txt &&\
 ln -s /opt/altdns/altdns.py /usr/local/bin/altdns.py
 WORKDIR /opt/altdns
 
-# Install faze
-WORKDIR /opt/faze
-ADD . /opt/faze
+# Install python-faze
+WORKDIR /opt/python-faze
+ADD . /opt/python-faze
 RUN pip3 install -q -r requirements.txt &&\
-  ln -s /opt/faze/faze /usr/local/bin/faze
+  ln -s /opt/python-faze/faze-cli /usr/local/bin/faze-cli
 
 # Install GoBuster
 WORKDIR /usr/local/bin
@@ -63,4 +63,4 @@ WORKDIR /opt/Sublist3r
 
 # Temp Command
 WORKDIR /data/work
-ENTRYPOINT ["python3", "-u", "/opt/faze/faze"]
+ENTRYPOINT ["python3", "-u", "/opt/python-faze/faze-cli"]

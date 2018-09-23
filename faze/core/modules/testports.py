@@ -10,8 +10,8 @@ woo testing for open tcp/udp ports
 import csv
 import socket
 
-from core.helpers.term import ctinfo
-from core.parsers.config import ParseConfig
+from faze.core.helpers.term import ctinfo
+from faze.core.parsers.config import ParseConfig
 
 parseconfig = ParseConfig()
 

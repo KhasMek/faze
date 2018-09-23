@@ -6,12 +6,12 @@ import os
 import re
 import subprocess
 
-from core.parsers.config import ParseConfig
-from core.parsers.targets import BaseTargetsFile
-from core.helpers.misc import build_wordlist, ResolveHostname
-from core.helpers.term import clean_output, ctact, cterr, ctinfo
-from core.services.logwriter import LoggingManager
-from core.services.threading import FazeWorker
+from faze.core.parsers.config import ParseConfig
+from faze.core.parsers.targets import BaseTargetsFile
+from faze.core.helpers.misc import build_wordlist, ResolveHostname
+from faze.core.helpers.term import clean_output, ctact, cterr, ctinfo
+from faze.core.services.logwriter import LoggingManager
+from faze.core.services.threading import FazeWorker
 from queue import Queue
 
 
