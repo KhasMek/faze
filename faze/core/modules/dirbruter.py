@@ -38,14 +38,17 @@ class DirBruter:
             for target_url in target_urls:
                 print("{a}   TARGET: {t}".format(a=ctact, t=target_url))
                 logging.info("{a}   TARGET: {t}".format(a=ctact, t=target_url))
-                if self.check_no_redirect(target_url):
-                    logging.info("Building wordlist for {u}".format(u=target_url))
-                    word_queue = build_wordlist(wordlist_files, 'subdirectory', "{o}/merged-dirbruter-wordlist.txt".format(o=outdir))
-                    logging.info("Wordlist built")
-                    json_results = self.dir_bruter(target_url, word_queue, user_agent)
-                    json_output[target_url] = json_results
-                else:
-                    print("{i}     {t} redirects! Skipping...".format(i=ctinfo, t=target_url))
+                try:
+                    if self.check_no_redirect(target_url):
+                        logging.info("Building wordlist for {u}".format(u=target_url))
+                        word_queue = build_wordlist(wordlist_files, 'subdirectory', "{o}/merged-dirbruter-wordlist.txt".format(o=outdir))
+                        logging.info("Wordlist built")
+                        json_results = self.dir_bruter(target_url, word_queue, user_agent)
+                        json_output[target_url] = json_results
+                    else:
+                        print("{i}     {t} redirects! Skipping...".format(i=ctinfo, t=target_url))
+                except Exception as error:
+                    print("{e}     {t} {error}".format(e=cterr, t=target_url, error=error))
             outfile = "{od}/dirbruter_output.json".format(od=outdir)
             self.write_json_outfile(outfile, json_output)
         else:
