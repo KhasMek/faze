@@ -65,9 +65,9 @@ class NmapXML:
                         if fqdn:
                             for s in host.services:
                                 if "https" in s.service:
-                                    fqdn_targets.append('https://' + domain)
+                                    fqdn_targets.add('https://' + domain)
                                 if "http" in s.service:
                                     if "ssl" in s.tunnel:
-                                        fqdn_targets.append('https://' + domain)
+                                        fqdn_targets.add('https://' + domain)
                                     else:
-                                        fqdn_targets.append('http://' + domain)
+                                        fqdn_targets.add('http://' + domain)

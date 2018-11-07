@@ -60,7 +60,7 @@ class ParseConfig:
     # This is a sec of up IP's with their open ports
     port_targets_dict = defaultdict(set)
     www_targets = {}
-    fqdn_targets = []
+    fqdn_targets = set()
     tld_targets = []
 
     # LOGGING AND MESSAGING SERVICES
