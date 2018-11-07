@@ -2,7 +2,6 @@
 
 FROM ubuntu:latest
 
-# TODO: make sure I need all deez
 RUN apt-get -qq update && apt-get -qq upgrade && apt-get -qq install -y\
   curl \
   fping \
@@ -18,13 +17,11 @@ WORKDIR /opt
 RUN git clone --depth 1 https://github.com/infosec-au/altdns.git &&\
 pip install -q -r altdns/requirements.txt &&\
 ln -s /opt/altdns/altdns.py /usr/local/bin/altdns.py
-WORKDIR /opt/altdns
 
 # Install python-faze
 WORKDIR /opt/python-faze
 ADD . /opt/python-faze
-RUN pip3 install -q -r requirements.txt &&\
-  ln -s /opt/python-faze/faze-cli /usr/local/bin/faze-cli
+RUN python3 setup.py install
 
 # Install GoBuster
 WORKDIR /usr/local/bin
@@ -36,31 +33,21 @@ RUN VER=$(curl --silent "https://api.github.com/repos/OJ/gobuster/releases/lates
   chmod a+x gobuster
 
 # Install Nikto
+# TODO: Nikto has a serious issue reading the DTD while in a
+# Docker container. This needs to get fixed.
 WORKDIR /opt
-RUN git clone --depth 1 https://github.com/sullo/nikto &&\
-  ln -s /opt/nikto/program/nikto.pl /usr/local/bin/nikto
+RUN git clone --depth 1 https://github.com/sullo/nikto nikto
 
 # Install recon-ng
-WORKDIR /opt
 RUN git clone --depth 1 https://LaNMaSteR53@bitbucket.org/LaNMaSteR53/recon-ng.git &&\
   pip install -q -r recon-ng/REQUIREMENTS &&\
   ln -s /opt/recon-ng/recon-ng /usr/local/bin/recon-ng
-WORKDIR /opt/recon-ng
 
 # Install Seclists
-WORKDIR /opt
 RUN curl --silent -O -L "https://github.com/danielmiessler/SecLists/archive/master.tar.gz" &&\
   tar xf master.tar.gz --exclude="Payloads/File-Names/max-length/*" &&\
   mv SecLists-master SecLists &&\
   rm master.tar.gz
 
-# Install Sublist3r
-WORKDIR /opt
-RUN git clone --depth 1 https://github.com/aboul3la/Sublist3r.git &&\
-  pip install -q -r Sublist3r/requirements.txt &&\
-  ln -s /opt/Sublist3r/sublist3r.py /usr/local/bin/sublist3r.py
-WORKDIR /opt/Sublist3r
-
-# Temp Command
 WORKDIR /data/work
-ENTRYPOINT ["python3", "-u", "/opt/python-faze/faze-cli"]
+CMD ["faze"]
