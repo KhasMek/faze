@@ -5,4 +5,5 @@ pygeoip
 python-nmap
 python-libnmap
 requests
+-e https://github.com/aboul3la/Sublist3r@master
 tldextract

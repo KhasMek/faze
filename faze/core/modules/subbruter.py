@@ -3,7 +3,7 @@
 import datetime
 import logging
 import os
-import re
+import sublist3r
 import subprocess
 
 from faze.core.parsers.config import ParseConfig
@@ -93,11 +93,9 @@ class SubBruter:
                                       bruteforce=brutefore_subdomains))
             outfiles['enumall'] = "{o}/enumall-results.csv".format(o=outdir)
         sublister_outfile = "{o}/sublister-results.txt".format(o=outdir)
-        sublister_path = parseconfig.subbruter_sublister_path
-        if sublister_path:
-            queue.put(lambda: Sublist3r(tld_targets, merged_wordlist, sublister_outfile, threads=threads,
-                                        sublister_path=sublister_path, bruteforce=brutefore_subdomains))
-            outfiles['Sublist3r'] = sublister_outfile
+        queue.put(lambda: Sublist3r(tld_targets, merged_wordlist, sublister_outfile, threads=threads,
+                                    bruteforce=brutefore_subdomains))
+        outfiles['Sublist3r'] = sublister_outfile
         queue.join()
 
         return outfiles
@@ -220,31 +218,17 @@ class Sublist3r:
     It would be a lot cleaner to invoke sublist3r as native python code, but I think until it becomes part of pip,
     or at least has a setup.py file, we'll just call it like plebs
     """
-    def __init__(self, tld_targets, merged_wordlist, sublister_outfile, threads='20', sublister_path="", bruteforce=""):
+    def __init__(self, tld_targets, merged_wordlist, sublister_outfile, threads='20', bruteforce=""):
         if bruteforce:
             print("{e}     Bruteforce is currently disabled for Sublist3r, but it will be available in the future."
                   .format(e=cterr))
         print("{i}   STARTING - Sublist3r".format(i=ctinfo))
         logging.info("STARTING - Sublist3r")
         for target in tld_targets.split(','):
-            cmd = [
-                "python",
-                sublister_path,
-                "-d",
-                target,
-                "-t",
-                threads,
-                "-o",
-                sublister_outfile
-            ]
-            logging.debug("running Sublist3r with command {cmd}".format(cmd=cmd))
-            command = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=None, universal_newlines=True, shell=False)
-            if command.stdout:
-                print("{i}   Sublist3r Results for {t}:".format(i=ctinfo, t=target))
-                for line in command.stdout.split("\n"):
-                    line = clean_output(line)
-                    if re.match('[A-Za-z]', line):
-                        print("{i}     {o}".format(i=ctinfo, o=line))
+            subdomains = sublist3r.main(target, threads, sublister_outfile, ports=None, silent=True,
+                                        verbose=False, enable_bruteforce=False, engines=None)
+            for subdomain in subdomains:
+                print("{i}     {o}".format(i=ctinfo, o=subdomain))
         print("{i}   COMPLETED - Sublist3r".format(i=ctinfo))
         logging.info("COMPLETED - Sublist3r")
 
