@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""
+Main executable for module
+"""
+import sys
+
+from datetime import datetime
+from .core.bootstrap.structure import CreateStructure
+from .core.helpers.term import ctinfo
+from .core.modules.dirbruter import DirBruter
+from .core.modules.fping import Fping
+from .core.modules.httpscreenshot import HttpScreenshot
+from .core.modules.nessus import Nessus
+from .core.modules.nikto import Nikto
+from .core.modules.nmap import NMap
+from .core.modules.subbruter import SubBruter
+from .core.modules.testports import TCPPorts
+from .core.parsers.targets import BaseTargetsFile, PortTargetsFile
+from .core.parsers.config import ParseConfig
+
+
+def main():
+    parseconfig = ParseConfig()
+    # INITIAL TIME STUFF
+    start_time = datetime.now()
+    print("{i} START TIME: {t}".format(i=ctinfo, t=start_time))
+
+    # CREATE STRUCTURE
+    createstructure = CreateStructure()
+    createstructure.main()
+
+    # TARGETS
+    basetargetsfile = BaseTargetsFile()
+    basetargetsfile.main()
+
+    # SUBBRUTER
+    if parseconfig.subbruter_enabled:
+        subbruter = SubBruter()
+        subbruter.main()
+
+    # FPING
+    if parseconfig.fping_enabled:
+        fping = Fping()
+        fping.main()
+
+    # NMAP
+    if parseconfig.nmap_enabled:
+        nmap = NMap()
+        nmap.main()
+
+    # TODO: write uptargets from scan_targets_dic to file/db(?)
+
+    # PARSE HOSTS WITH OPEN PORTS
+    porttargetsfile = PortTargetsFile()
+    porttargetsfile.main()
+
+    # DOUBLE CHECK PORTS DETECTED BY NMAP (and soon other services)
+    tcpports = TCPPorts()
+    tcpports.main()
+
+    # HTTPSCREENSHOT
+    if parseconfig.httpscreenshot_enabled:
+        httpscreenshot = HttpScreenshot()
+        httpscreenshot.main()
+
+    # NIKTO
+    if parseconfig.nikto_enabled:
+        nikto = Nikto()
+        nikto.main()
+
+    # DIRBRUTER
+    if parseconfig.dirbruter_enabled:
+        dirbruter = DirBruter()
+        dirbruter.main()
+
+    # NMAP PHASE-2
+    if parseconfig.nmap_phase_2_enabled:
+        nmap = NMap()
+        nmap.phase2()
+
+    # NESSUS
+    if parseconfig.nessus_enabled:
+        nessus = Nessus()
+        nessus.main()
+
+    # FINISH UP TIME STUFF
+    end_time = datetime.now()
+    print("{i} END TIME: {t}".format(i=ctinfo, t=end_time))
+    print("{i} TOOK {t}".format(i=ctinfo, t=end_time - start_time))
+
+
+if __name__ == "__main__":
+    main()
