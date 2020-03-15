@@ -1,0 +1,2 @@
+# Ignore local work directory if another hasn't been specified
+work/
